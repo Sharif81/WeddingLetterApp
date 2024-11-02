@@ -21,7 +21,7 @@ namespace WeddingLetter.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAllCompany()
+        public async Task<IActionResult> GetAllCompany() 
         {
             var companys = await _companyRepository.GetAllCompanyAsync();
 

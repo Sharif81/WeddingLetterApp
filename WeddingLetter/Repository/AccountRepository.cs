@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using WeddingLetter.DTOs;
 using WeddingLetter.Models;
 
 namespace WeddingLetter.Repository
@@ -14,7 +15,6 @@ namespace WeddingLetter.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
@@ -24,22 +24,26 @@ namespace WeddingLetter.Repository
             _signInManager = signInManager;
             _configuration = configuration;
         }
-        public async Task<IdentityResult> SignUpAsync(SignUpModel signUpModel)
+        public async Task<IdentityResult> SignUpAsync(SignUpDTO signUpDTO)
         {
+            if(await UsernameExitsAsync(signUpDTO.Email))
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "Username already Exists" });
+            }
             var user = new ApplicationUser()
             {
-                FirstName = signUpModel.FirstName,
-                LastName = signUpModel.LastName,
-                Email = signUpModel.Email,
-                UserName = signUpModel.Email
+                FirstName = signUpDTO.FirstName,
+                LastName = signUpDTO.LastName,
+                Email = signUpDTO.Email,
+                UserName = signUpDTO.Email
             };
 
-           return await _userManager.CreateAsync(user, signUpModel.Password);
+           return await _userManager.CreateAsync(user, signUpDTO.Password);
         }
 
-        public async Task<string> LoginAsync(SignInModel signInModel)
+        public async Task<string> LoginAsync(SignInDTO signInDTO)
         {
-            var result = await _signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(signInDTO.Email, signInDTO.Password, false, false);
 
             if (!result.Succeeded)
             {
@@ -48,7 +52,7 @@ namespace WeddingLetter.Repository
 
             var authClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, signInModel.Email),
+                new Claim(ClaimTypes.Name, signInDTO.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -63,6 +67,12 @@ namespace WeddingLetter.Repository
                 );
 
            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<bool> UsernameExitsAsync(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null;
         }
 
     }

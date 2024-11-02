@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WeddingLetter.Data
 {
-    public class Payments
+    public class Payments : BaseEntities
     {
-        public int Id { get; set; }
+       
         public DateTime Date { get; set; }
         public string InvoiceId { get; set; }
         public decimal TotalAmount { get; set; }

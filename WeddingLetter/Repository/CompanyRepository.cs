@@ -20,7 +20,7 @@ namespace WeddingLetter.Repository
         }
 
         //Get All - API
-        public async Task<List<CompanyModel>> GetAllCompanyAsync()
+        public async Task<IReadOnlyList<CompanyModel>> GetAllCompanyAsync()
         {
             // One way to find data
             //var companysRecords = await _context.Company.Select(x => new CompanyModel()

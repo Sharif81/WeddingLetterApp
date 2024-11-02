@@ -2,9 +2,8 @@
 
 namespace WeddingLetter.Data
 {
-    public class Venues
-    {
-        public int Id { get; set; }
+    public class Venues : BaseEntities
+    {       
         [Required]
         public string Name { get; set; }
         [Required]

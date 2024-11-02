@@ -5,9 +5,9 @@ using System.Security.Permissions;
 
 namespace WeddingLetter.Data
 {
-    public class Events
+    public class Events : BaseEntities
     {
-        public int Id { get; set; }
+     
         [Required]
         public DateTime Date { get; set; }
         [Required]

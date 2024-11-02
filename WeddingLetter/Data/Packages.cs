@@ -2,9 +2,9 @@
 
 namespace WeddingLetter.Data
 {
-    public class Packages
+    public class Packages : BaseEntities
     {
-        public int Id { get; set; }
+      
         [Required]
         public string Name { get; set; }
         [Required]

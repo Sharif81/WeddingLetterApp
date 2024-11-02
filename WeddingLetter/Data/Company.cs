@@ -2,9 +2,8 @@
 
 namespace WeddingLetter.Data
 {
-    public class Company
-    {        
-        public int Id { get; set; }
+    public class Company : BaseEntities    {        
+       
         [Required]
         public string Name { get; set; }
         [Required]

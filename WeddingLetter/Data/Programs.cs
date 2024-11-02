@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WeddingLetter.Data
 {
-    public class Programs
-    {
-        public int Id { get; set; }       
+    public class Programs : BaseEntities
+    {     
         [Required]
         public DateTime Date { get; set; }
         [Required]

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeddingLetter.Data;
 
 namespace WeddingLetter.Migrations
 {
     [DbContext(typeof(WeddingLetterContext))]
-    partial class WeddingLetterContextModelSnapshot : ModelSnapshot
+    [Migration("20240612041201_addeBaseEntities")]
+    partial class addeBaseEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

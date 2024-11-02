@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
+using WeddingLetter.DTOs;
 using WeddingLetter.Models;
 using WeddingLetter.Repository;
 
@@ -17,28 +20,42 @@ namespace WeddingLetter.Controllers
         {
             _accountRepository = accountRepository;
         }
+
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpModel signUpModal)
+        public async Task<IActionResult> SignUp([FromBody] SignUpDTO signUpDTO)
         {
-            var result = await _accountRepository.SignUpAsync(signUpModal);
+            var result = await _accountRepository.SignUpAsync(signUpDTO);
+
             if (result.Succeeded)
             {
-                return Ok(result.Succeeded);
+                return Ok (new AuthResponseDTO { Success = true});
             }
-            return Unauthorized();
+            return BadRequest(new AuthResponseDTO
+            {
+                Success = false,
+                Errors = result.Errors.Select(e => e.Description)
+            });
         }
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] SignInModel signInModel)
+        public async Task<IActionResult> Login([FromBody] SignInDTO signInDTO)
         {
-            var result = await _accountRepository.LoginAsync(signInModel);
+            var toekn = await _accountRepository.LoginAsync(signInDTO);
 
-            if (string.IsNullOrEmpty(result))
+            if (string.IsNullOrEmpty(toekn))
             {
-                return Unauthorized();
+                return Unauthorized(new AuthResponseDTO { Success = false});
             }
-            return Ok(result);
+            return Ok(new AuthResponseDTO { Success = true, Token = toekn});
+        }
+
+        [HttpGet("username-exists/{username}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UsernameExists(string username)
+        {
+            var exists = await _accountRepository.UsernameExitsAsync(username);
+            return Ok(new {exists});
         }
     }
 }

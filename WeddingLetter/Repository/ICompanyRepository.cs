@@ -7,7 +7,7 @@ namespace WeddingLetter.Repository
 {
     public interface ICompanyRepository
     {
-        Task<List<CompanyModel>> GetAllCompanyAsync();
+        Task<IReadOnlyList<CompanyModel>> GetAllCompanyAsync();
         Task<CompanyModel> GetCompanyByIdAsync(int companyId);
         Task<int> AddCompanyAsync(CompanyModel companyModel);
         Task UpdateCompanyAsync(int companyId, CompanyModel companyModel);
