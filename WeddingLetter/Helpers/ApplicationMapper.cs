@@ -35,6 +35,7 @@ namespace WeddingLetter.Helpers
             CreateMap<Venues, VenueModel>().ReverseMap();
 
             CreateMap<Payments, PaymentsModel>();
+            CreateMap<PaymentsModel, Payments>().ReverseMap();
         }
     }
 }
